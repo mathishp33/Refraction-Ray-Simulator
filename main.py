@@ -1,42 +1,51 @@
-import pygame as pg
-import math
+import tkinter as tk
+from tkinter import ttk
+import calculator 
 
-pg.init()
-RES = WIDTH, HEIGHT = 1600, 900
-screen = pg.display.set_mode(RES)
-clock = pg.time.Clock()
+root = tk.Tk()
+root.title('Refraction Angle Calculator')
 
-FPS = 60
+root.geometry('300x200+50+50')
+root.resizable(False, False)
 
-center = (WIDTH//2, HEIGHT//2)
+n1 = tk.StringVar()
+n2 = tk.StringVar()
+i1= tk.StringVar()
 
-n1 = 1.0
-n2 = 1.5
-i1 = 17.0
-i2 = math.degrees(math.asin(n1*math.sin(math.radians(i1))/n2))#fix
+def clicked():
+    try: 
+        local_n1, local_n2, local_i1 = float(n1.get()), float(n2.get()), float(i1.get())
+    except: 
+        print('values affection error')
+    ga = calculator.Main(local_n1, local_n2, local_i1)
+    root.quit()
+    
+frame = ttk.Frame(root)
+frame.pack(padx=10, pady=10, fill='x', expand=True)
 
-pos1 = (WIDTH/2-(math.tan(math.radians(i1)))*HEIGHT/2, 0)
-pos2 = (WIDTH/2+(math.tan(math.radians(i1)))*HEIGHT/2, 0)
-pos3 = (WIDTH/2+(math.tan(math.radians(i2)))*HEIGHT/2, HEIGHT)#fix
 
-print(pos1)
-print('n1 : ', n1, ' | n2 : ', n2)
-print('i1 : ', i1, ' | i2 : ', i2)
-running = True
-while running:
-    screen.fill((0, 0, 0))
-    for event in pg.event.get():
-        if event.type == pg.QUIT:
-            running = False
-            
-    pg.draw.line(screen, (255, 255, 255), (WIDTH, center[1]), (0 ,center[1]), 5)
-    for i in range(0, HEIGHT, HEIGHT//20):
-        if i//2 == int(i/2):
-            pg.draw.line(screen, (255, 255, 255), (center[0], i), (center[0], i+20), 5)
-    pg.draw.line(screen, (0, 255, 0), pos1, center, 5)
-    pg.draw.line(screen, (0, 123, 0), pos2, center, 5)
-    pg.draw.line(screen, (200, 0, 0), pos3, center, 5)
-        
-    pg.display.update()
-    clock.tick(FPS)
-pg.quit()
+n1_button = ttk.Label(frame, text="n1:")
+n1_button.pack(fill='x', expand=True)
+
+n1_entry = ttk.Entry(frame, textvariable=n1)
+n1_entry.pack(fill='x', expand=True)
+
+
+n2_button = ttk.Label(frame, text="n2:")
+n2_button.pack(fill='x', expand=True)
+
+n2_entry = ttk.Entry(frame, textvariable=n2)
+n2_entry.pack(fill='x', expand=True)
+
+
+i1_button = ttk.Label(frame, text="i1:")
+i1_button.pack(fill='x', expand=True)
+
+i1_entry = ttk.Entry(frame, textvariable=i1)
+i1_entry.pack(fill='x', expand=True)
+
+
+login_button = ttk.Button(frame, text="Submit", command=clicked)
+login_button.pack(fill='x', expand=True, pady=10)
+
+root.mainloop()
